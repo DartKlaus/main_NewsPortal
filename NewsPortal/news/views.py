@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 # from django.contrib.auth.models import User
@@ -11,7 +12,7 @@ class PostsList(ListView):
     ordering = '-post_time'
     template_name = 'news.html'
     context_object_name = 'news'
-    paginate_by = 2
+    paginate_by = 10
 
     # Переопределяем функцию получения списка постов
     def get_queryset(self):
@@ -41,7 +42,8 @@ class PostsSearch(PostsList):
     template_name = 'search.html'
 
 
-class NewsCreate(CreateView):
+class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post',)
     form_class = PostForm
     model = Post
     template_name = 'news_edit.html'
@@ -52,13 +54,15 @@ class NewsCreate(CreateView):
 #        return super().form_valid(form)
 
 
-class NewsUpdate(UpdateView):
+class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'news_edit.html'
 
 
-class NewsDelete(DeleteView):
+class NewsDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = ('news.delete_post',)
     model = Post
     template_name = 'news_delete.html'
     success_url = reverse_lazy('posts_list')

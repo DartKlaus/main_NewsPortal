@@ -10,7 +10,7 @@ News
 {% endblock title %}
 
 {% block content %}
-    <h1>Количество постов: {{ news|length }}</h1>
+    <h1>Количество постов на странице: {{ news|length }}</h1>
 
     <form action="" method="get">
         {{ filterset.form.as_p }}
@@ -28,7 +28,7 @@ News
 
             {% for post in news %}
             <tr>
-                <td><a href="{{ post.pk }}">{{ post.name|censor }}</a></td>
+                <td><a href="/news/{{ post.pk }}/">{{ post.name|censor }}</a></td>
                 <td>{{ post.post_time|date:'d M Y' }}</td>
                 <td>{{ post.text|truncatechars:20|censor }}</td>
             </tr>

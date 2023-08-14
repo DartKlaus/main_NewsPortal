@@ -11,7 +11,7 @@ News
 
 <!-- В контенте на странице мы выводим все посты -->
 {% block content %}
-    <h1>Количество постов: {{ news|length }}</h1>
+    <h1>Количество постов на странице: {{ news|length }}</h1>
     <hr>
     {% if news %}
         <table>
@@ -23,7 +23,7 @@ News
 
             {% for post in news %}
             <tr>
-                <td><a href="{{ post.pk }}">{{ post.name|censor }}</a></td>
+                <td><a href="/news/{{ post.pk }}/">{{ post.name|censor }}</a></td>
                 <td>{{ post.post_time|date:'d M Y' }}</td>
                 <td>{{ post.text|truncatechars:20|censor }}</td>
             </tr>
