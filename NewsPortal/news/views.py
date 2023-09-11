@@ -1,8 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-# from django.contrib.auth.models import User
-from .models import Post
+from .models import Post, Author
 from .filters import PostFilter
 from .forms import PostForm
 
@@ -48,10 +47,11 @@ class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Post
     template_name = 'news_edit.html'
 
-#    def form_valid(self, form):
-#        post = form.save(commit=False)
-#        post.author.id = self.request.user.id
-#        return super().form_valid(form)
+    def form_valid(self, form):
+        user = self.request.user
+        author = Author.objects.get(authorUser=user)
+        form.instance.author = author
+        return super(NewsCreate, self).form_valid(form)
 
 
 class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
